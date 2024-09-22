@@ -43,7 +43,7 @@ input[type="checkbox"]:hover {
 }
 
 input[type="checkbox"]:checked {
-    background-color: #5BCD3E;
+    background-color: #1266f1;
 }
 
 input[type="checkbox"]:checked:after {

@@ -1,8 +1,23 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import './fruit-card.css';
+import FruitContext  from '../../reducers/FruitContext';
 
-const FruitCard = ({ fruits }) => {
-  const eachFruit = fruits.map((fruit) => (
+
+
+const FruitCard = ({ fruits, type }) => {
+  const { state, dispatch } = useContext(FruitContext);
+
+  const addFruitToJar = (fruit) => {
+    dispatch({ type: 'ADD_FRUIT', payload: fruit });
+  };
+  
+  const removeFruitFromJar = (fruitId) => {
+    dispatch({ type: 'REMOVE_FRUIT', payload: fruitId });
+  };
+
+  const fruitsView = type === "fruitJar"  ? state.jar : fruits;
+
+  const eachFruit = fruitsView.map((fruit) => (
     <div className="fruit-card" key={fruit.id}>
       <div className="fruit-detail-container">
         <div className="fruit-name">
@@ -27,6 +42,8 @@ const FruitCard = ({ fruits }) => {
         <div className="fruit-detail">
           Order: <span className="fruit-detail-span">{fruit.order}</span>
         </div>
+        {type === "fruitJar" ? (<button onClick={() => removeFruitFromJar(fruit.name)}>Remove</button>) : 
+        (<button onClick={() => addFruitToJar(fruit)}>add</button>)}
       </div>
     </div>
   ));

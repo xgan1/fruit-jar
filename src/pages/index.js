@@ -4,30 +4,18 @@ import SearchForm from '../components/Search/SearchForm';
 import SearchFilter from '../components/SearchFilter/SearchFilter';
 import LoadingSpinner from '../components/LoadingSpinner/LoadingSpinner';
 import FruitCard from '../components/FruitCard/FruitCard';
-import { useState } from 'react';
-import { useEffect } from 'react';
+import { useState, useContext, useEffect } from 'react';
+import FruitContext from '../reducers/FruitContext';
 
 import './style.css';
 
 const Home = () => {
-  const [fruits, setFruits] = useState([]);
-  const [filteredFruits, setFilteredFruits] = useState([]);
-  const [fruitInDetail, setFruitinDetail] = useState({});
-  const [isLoading, setIsLoading] = useState(true);
-
-  const getFruitDetails = async () => {
-    try {
-      const response = await fetch(`https://proxyserver-phi.vercel.app/showd/${fruitInDetail}`);
-      console.log('response = ', response);
-      const oneFruit = await response.json();
-      if (response.status === 200) {
-        setFruitinDetail(oneFruit);
-        console.log(`oneFruit = `, oneFruit);
-      }
-    } catch (error) {
-      console.log('Something went wrong while fetching the fruit details from the server!', error);
-    }
+  const { state, dispatch } = useContext(FruitContext);
+  const setFruits = (fruits) => {
+    dispatch({ type: 'SET_FRUIT', payload: fruits });
   };
+  const [filteredFruits, setFilteredFruits] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchFruits = async () => {
     try {
@@ -44,7 +32,13 @@ const Home = () => {
   };
 
   useEffect(() => {
-    fetchFruits();
+    if(state.fruits.length === 0) {
+      fetchFruits();
+    } else {
+      //setFilteredFruits(state.fruits);
+      setIsLoading(false);
+    }
+    
   }, []);
 
   return (
@@ -53,12 +47,12 @@ const Home = () => {
         <div className="container">
           <div className="search-components">
             <SearchForm
-              fruits={fruits}
+              fruits={state.fruits}
               filteredFruits={filteredFruits}
               setFilteredFruits={setFilteredFruits}
             />
             <SearchFilter
-              fruits={fruits}
+              fruits={state.fruits}
               filteredFruits={filteredFruits}
               setFilteredFruits={setFilteredFruits}
             />
@@ -72,19 +66,19 @@ const Home = () => {
         <div className="container">
           <div className="search-components">
             <SearchForm
-              fruits={fruits}
+              fruits={state.fruits}
               filteredFruits={filteredFruits}
               setFilteredFruits={setFilteredFruits}
             />
             <SearchFilter
-              fruits={fruits}
+              fruits={state.fruits}
               filteredFruits={filteredFruits}
               setFilteredFruits={setFilteredFruits}
             />
           </div>
 
           <div className="fruit-cards">
-            <FruitCard fruits={filteredFruits} getFruitDetails={getFruitDetails} />
+            <FruitCard fruits={filteredFruits}  type={"allFruit"}/>
           </div>
         </div>
       )}

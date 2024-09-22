@@ -11,8 +11,8 @@
     height: 46px;
     margin: 1px;
     border-radius: 50%;
-    border: 5px solid #5BCD3E;
-    border-color: #5BCD3E transparent #5BCD3E transparent;
+    border: 5px solid #1266f1;
+    border-color: #1266f1 transparent #1266f1 transparent;
     animation: lds-dual-ring 1.2s linear infinite;
 }
 
